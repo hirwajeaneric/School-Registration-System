@@ -44,12 +44,12 @@ public class DataEntryForm extends javax.swing.JInternalFrame {
         lastNameTextField = new javax.swing.JTextField();
         phoneNumberField = new javax.swing.JTextField();
         EmailTextField = new javax.swing.JTextField();
-        dateOfBirthDateChooser = new com.toedter.calendar.JDateChooser();
         RegistrantTypeComboBox = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         MaleRadioButton = new javax.swing.JRadioButton();
         FemaleRadioButton = new javax.swing.JRadioButton();
         BrowsePictureButton = new javax.swing.JButton();
+        dateOfBirthDateChooser = new com.toedter.calendar.JDateChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
         dataEntryTable = new javax.swing.JTable();
         ImagePanel = new javax.swing.JPanel();
@@ -108,7 +108,6 @@ public class DataEntryForm extends javax.swing.JInternalFrame {
         jPanel1.add(lastNameTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 50, 130, -1));
         jPanel1.add(phoneNumberField, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 140, 130, -1));
         jPanel1.add(EmailTextField, new org.netbeans.lib.awtextra.AbsoluteConstraints(148, 169, 130, -1));
-        jPanel1.add(dateOfBirthDateChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 130, -1));
 
         RegistrantTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Student", "Lecturer", "Administrator" }));
         jPanel1.add(RegistrantTypeComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(148, 199, 130, -1));
@@ -140,6 +139,7 @@ public class DataEntryForm extends javax.swing.JInternalFrame {
         BrowsePictureButton.setForeground(new java.awt.Color(0, 0, 51));
         BrowsePictureButton.setText("Browse");
         jPanel1.add(BrowsePictureButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 230, 130, 30));
+        jPanel1.add(dateOfBirthDateChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 80, 130, -1));
 
         jPanel2.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 53, 300, 272));
 
