@@ -1,7 +1,13 @@
 package view;
 
+import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import controller.UserAccountsDao;
+import utils.ConnectionToDataBase;
+import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -9,12 +15,43 @@ import javax.swing.JOptionPane;
  */
 public class LoginForm extends javax.swing.JFrame {
 
+    public Connection con = null;
+    public PreparedStatement ps = null;
+    public Statement rs = null;
+    public ResultSet s = null;
     ViewControler vcl = new ViewControler();
+    ConnectionToDataBase dbconnector = new ConnectionToDataBase();
+    UserAccountsDao accountDao = new UserAccountsDao();
+    String savedUsername;
+    String savedPassword;
+    String enteredUsername;
+    String enteredPassword;
     
     public LoginForm() {
         initComponents();
+        retrieveData();
+        ErrorNotice.setVisible(false);
     }
 
+    public void retrieveData(){
+        try {
+            dbconnector.getConnection();
+            String sql = "SELECT * FROM userAccounts";
+            dbconnector.s = dbconnector.con.createStatement();
+            dbconnector.rs = dbconnector.s.executeQuery(sql);
+            while (res.next()) {                
+                savedUsername = res.getString(1);
+                String phoneNumber = res.getString(2);
+                savedPassword = res.getString(3);
+                String ConfirmPassword = res.getString(4);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            dbconnector.getDisconnection();
+        }
+    }
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -72,6 +109,14 @@ public class LoginForm extends javax.swing.JFrame {
         loginButton.setForeground(new java.awt.Color(255, 255, 255));
         loginButton.setText("Login");
         loginButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        loginButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                loginButtonMouseExited(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                loginButtonMouseEntered(evt);
+            }
+        });
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loginButtonActionPerformed(evt);
@@ -213,20 +258,19 @@ public class LoginForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        String username;
-        String password;
         
-        String enteredusername = usernameTextField.getText();
-        char[] enteredpassword = passwordField.getPassword();
+        enteredUsername = usernameTextField.getText();
+        enteredPassword = passwordField.getPassword().toString();
         
-        if(!"".equals(usernameTextField.getText()))if("hirwa".equals(usernameTextField.getText())){
-            vcl.openRegistrationForm();
-            vcl.closeLoginForm();
-        }else{
-            ErrorNotice.setText("Username or password does not match!");
-        }else {
-            ErrorNotice.setText("Please first enter your username!!");
+        if(enteredUsername == savedUsername && enteredPassword == savedPassword){
+            ErrorNotice.setVisible(false);
+            MainSystem main = new MainSystem();
+            main.setVisible(true);
+        }else if(enteredUsername != savedUsername || enteredPassword != savedPassword) {
+            ErrorNotice.setVisible(true);
+            ErrorNotice.setText("Username and Password does not match!");
         }
+        
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void createAccountLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createAccountLinkMouseClicked
@@ -241,7 +285,11 @@ public class LoginForm extends javax.swing.JFrame {
     }//GEN-LAST:event_usernameTextFieldKeyPressed
 
     private void usernameTextFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_usernameTextFieldKeyReleased
-
+        if(enteredUsername == savedUsername){
+            ErrorNotice.setVisible(true);
+            ErrorNotice.setForeground(Color.GREEN);
+            ErrorNotice.setText("Validated!");
+        }
     }//GEN-LAST:event_usernameTextFieldKeyReleased
 
     private void usernameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_usernameTextFieldFocusLost
@@ -259,6 +307,16 @@ public class LoginForm extends javax.swing.JFrame {
     private void createAccountLinkMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_createAccountLinkMouseExited
         createAccountLink.setForeground(new java.awt.Color(0,0,0));
     }//GEN-LAST:event_createAccountLinkMouseExited
+
+    private void loginButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseEntered
+        loginButton.setBackground(new java.awt.Color(153,204,255));
+        loginButton.setForeground(Color.BLACK);
+    }//GEN-LAST:event_loginButtonMouseEntered
+
+    private void loginButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginButtonMouseExited
+        loginButton.setBackground(new java.awt.Color(0, 51, 255));
+        loginButton.setForeground(Color.WHITE);
+    }//GEN-LAST:event_loginButtonMouseExited
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

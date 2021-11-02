@@ -106,8 +106,8 @@
                               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="newUserNameTextField" pref="140" max="32767" attributes="0"/>
-                                  <Component id="CreatePasswordTextField" pref="140" max="32767" attributes="0"/>
-                                  <Component id="ConfirmPasswordTextField" max="32767" attributes="0"/>
+                                  <Component id="CreatePasswordField" pref="140" max="32767" attributes="0"/>
+                                  <Component id="ConfirmPasswordField" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="missingUsernameLabel" alignment="1" min="-2" pref="222" max="-2" attributes="0"/>
@@ -134,12 +134,12 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="passwordLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="CreatePasswordTextField" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                          <Component id="CreatePasswordField" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="passwordLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="ConfirmPasswordTextField" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                          <Component id="ConfirmPasswordField" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="CreateAccountButton" min="-2" pref="35" max="-2" attributes="0"/>
@@ -178,14 +178,14 @@
                 <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="newUserNameTextFieldFocusLost"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JPasswordField" name="CreatePasswordTextField">
+            <Component class="javax.swing.JPasswordField" name="CreatePasswordField">
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="null"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CreatePasswordTextFieldActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CreatePasswordFieldActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="CreateAccountButton">
@@ -205,6 +205,8 @@
                 </Property>
               </Properties>
               <Events>
+                <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="CreateAccountButtonMouseExited"/>
+                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="CreateAccountButtonMouseEntered"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CreateAccountButtonActionPerformed"/>
               </Events>
             </Component>
@@ -219,7 +221,7 @@
                 <Property name="text" type="java.lang.String" value="Confirm password"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JPasswordField" name="ConfirmPasswordTextField">
+            <Component class="javax.swing.JPasswordField" name="ConfirmPasswordField">
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="null"/>
