@@ -1,7 +1,10 @@
 package view;
 
+import controller.UserAccountsDao;
+import java.awt.Color;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import model.UserAccounts;
 
 /**
  *
@@ -13,6 +16,7 @@ public class SignInForm extends javax.swing.JFrame {
     
     public SignInForm() {
         initComponents();
+        missingUsernameLabel.setVisible(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -24,10 +28,10 @@ public class SignInForm extends javax.swing.JFrame {
         usernameLabel = new javax.swing.JLabel();
         passwordLabel = new javax.swing.JLabel();
         newUserNameTextField = new javax.swing.JTextField();
-        CreatePasswordTextField = new javax.swing.JPasswordField();
+        CreatePasswordField = new javax.swing.JPasswordField();
         CreateAccountButton = new javax.swing.JButton();
         passwordLabel1 = new javax.swing.JLabel();
-        ConfirmPasswordTextField = new javax.swing.JPasswordField();
+        ConfirmPasswordField = new javax.swing.JPasswordField();
         usernameLabel1 = new javax.swing.JLabel();
         newPhoneNumberField = new javax.swing.JTextField();
         missingUsernameLabel = new javax.swing.JLabel();
@@ -54,10 +58,10 @@ public class SignInForm extends javax.swing.JFrame {
             }
         });
 
-        CreatePasswordTextField.setBorder(null);
-        CreatePasswordTextField.addActionListener(new java.awt.event.ActionListener() {
+        CreatePasswordField.setBorder(null);
+        CreatePasswordField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CreatePasswordTextFieldActionPerformed(evt);
+                CreatePasswordFieldActionPerformed(evt);
             }
         });
 
@@ -66,6 +70,14 @@ public class SignInForm extends javax.swing.JFrame {
         CreateAccountButton.setForeground(new java.awt.Color(255, 255, 255));
         CreateAccountButton.setText("Create Account");
         CreateAccountButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        CreateAccountButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                CreateAccountButtonMouseExited(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                CreateAccountButtonMouseEntered(evt);
+            }
+        });
         CreateAccountButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CreateAccountButtonActionPerformed(evt);
@@ -76,7 +88,7 @@ public class SignInForm extends javax.swing.JFrame {
         passwordLabel1.setForeground(new java.awt.Color(255, 255, 255));
         passwordLabel1.setText("Confirm password");
 
-        ConfirmPasswordTextField.setBorder(null);
+        ConfirmPasswordField.setBorder(null);
 
         usernameLabel1.setForeground(new java.awt.Color(255, 255, 255));
         usernameLabel1.setText("Phone number");
@@ -118,8 +130,8 @@ public class SignInForm extends javax.swing.JFrame {
                         .addGap(27, 27, 27)
                         .addGroup(CreateAccountPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(newUserNameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-                            .addComponent(CreatePasswordTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
-                            .addComponent(ConfirmPasswordTextField)))
+                            .addComponent(CreatePasswordField, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                            .addComponent(ConfirmPasswordField)))
                     .addComponent(missingUsernameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(55, 55, 55))
         );
@@ -139,11 +151,11 @@ public class SignInForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(CreateAccountPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(passwordLabel)
-                    .addComponent(CreatePasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(CreatePasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20)
                 .addGroup(CreateAccountPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(passwordLabel1)
-                    .addComponent(ConfirmPasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ConfirmPasswordField, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(CreateAccountButton, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29))
@@ -191,24 +203,30 @@ public class SignInForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CreateAccountButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreateAccountButtonActionPerformed
-        String username;
-        String password;
-
-        String enteredusername = newUserNameTextField.getText();
-        char[] enteredpassword = CreatePasswordTextField.getPassword();
-
-        if("".equals(ConfirmPasswordTextField.getPassword())){
-            JOptionPane.showMessageDialog(this, "Please Confirm your password!", "ERROR",JOptionPane.ERROR_MESSAGE);
-        }else if("".equals(newUserNameTextField.getText())){
-            JOptionPane.showMessageDialog(this, "Please properly fill in the form!","ERROR", JOptionPane.ERROR_MESSAGE);
-        }else{
-            vcl.openLoginForm();
+        if ("".equals(newUserNameTextField.getText())) {
+            missingUsernameLabel.setVisible(true);
+            missingUsernameLabel.setText("Please first add Username!");
+        } else if("".equals(CreatePasswordField.getPassword().toString()) || "".equals(ConfirmPasswordField.getPassword().toString())){
+            missingUsernameLabel.setVisible(true);
+            missingUsernameLabel.setText("First Set password Please!");
+        } else {
+            UserAccounts users = new UserAccounts();
+            users.setUsername(newUserNameTextField.getText());
+            users.setPhoneNumber(newPhoneNumberField.getText());
+            users.setPassword(CreatePasswordField.getPassword().toString());
+            users.setConfirmPassword(ConfirmPasswordField.getPassword().toString());
+        
+            UserAccountsDao userDao = new UserAccountsDao();
+            userDao.saveCredentials(users);
+        
+            missingUsernameLabel.setText("");
+            JOptionPane.showMessageDialog(this, "Account Created!","Successful",JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_CreateAccountButtonActionPerformed
 
-    private void CreatePasswordTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreatePasswordTextFieldActionPerformed
-
-    }//GEN-LAST:event_CreatePasswordTextFieldActionPerformed
+    private void CreatePasswordFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreatePasswordFieldActionPerformed
+        
+    }//GEN-LAST:event_CreatePasswordFieldActionPerformed
 
     private void newUserNameTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_newUserNameTextFieldFocusLost
         if ("".equals(newUserNameTextField.getText())) {
@@ -231,6 +249,16 @@ public class SignInForm extends javax.swing.JFrame {
             missingUsernameLabel.setText("Phone number exceeds 10 digits");
         }
     }//GEN-LAST:event_newPhoneNumberFieldFocusLost
+
+    private void CreateAccountButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CreateAccountButtonMouseEntered
+        CreateAccountButton.setBackground(new java.awt.Color(153,204,255));
+        CreateAccountButton.setForeground(Color.BLACK);
+    }//GEN-LAST:event_CreateAccountButtonMouseEntered
+
+    private void CreateAccountButtonMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CreateAccountButtonMouseExited
+        CreateAccountButton.setBackground(new java.awt.Color(0, 51, 255));
+        CreateAccountButton.setForeground(Color.WHITE);
+    }//GEN-LAST:event_CreateAccountButtonMouseExited
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -272,11 +300,11 @@ public class SignInForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPasswordField ConfirmPasswordTextField;
+    private javax.swing.JPasswordField ConfirmPasswordField;
     private javax.swing.JPanel CreateAccountBackgroundPanel;
     private javax.swing.JButton CreateAccountButton;
     private javax.swing.JPanel CreateAccountPanel;
-    private javax.swing.JPasswordField CreatePasswordTextField;
+    private javax.swing.JPasswordField CreatePasswordField;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel missingUsernameLabel;
     private javax.swing.JTextField newPhoneNumberField;
